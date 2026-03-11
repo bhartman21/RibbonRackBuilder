@@ -54,32 +54,28 @@ export class RibbonDataService {
       category: 'mcl',
       imageUrl: '06_MCL_Marine_of_the_Year_Ribbon_-_National.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 8%, #FFD700 8%, #FFD700 92%, #CC0000 92%, #CC0000 100%)',
-      starType: 'bronze_3_16',
-      specialDevice: 'fmf'
+      starType: 'bronze_3_16'
     },
     {
       id: 7, name: 'MCL Associate Member of the Year Ribbon — National', shortName: 'AMOY National',
       category: 'mcl',
       imageUrl: '07_MCL_Associate_Member_of_the_Year_Ribbon_-_National.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 8%, #FFD700 8%, #FFD700 92%, #CC0000 92%, #CC0000 100%)',
-      starType: 'bronze_3_16',
-      specialDevice: 'bronze_a'
+      starType: 'bronze_3_16'
     },
     {
       id: 8, name: 'MCL Marine of the Year Ribbon — Division', shortName: 'MOY Division',
       category: 'mcl',
       imageUrl: '08_MCL_Marine_of_the_Year_Ribbon_-_Division.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 8%, #FFFFFF 8%, #FFFFFF 16%, #CC0000 16%, #CC0000 24%, #FFD700 24%, #FFD700 76%, #CC0000 76%, #CC0000 84%, #FFFFFF 84%, #FFFFFF 92%, #CC0000 92%, #CC0000 100%)',
-      starType: 'bronze_3_16',
-      specialDevice: 'fmf'
+      starType: 'bronze_3_16'
     },
     {
       id: 9, name: 'MCL Associate Member of the Year Ribbon — Division', shortName: 'AMOY Division',
       category: 'mcl',
       imageUrl: '09_MCL_Associate_Member_of_the_Year_Ribbon_-_Division.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 8%, #FFFFFF 8%, #FFFFFF 16%, #CC0000 16%, #CC0000 24%, #FFD700 24%, #FFD700 76%, #CC0000 76%, #CC0000 84%, #FFFFFF 84%, #FFFFFF 92%, #CC0000 92%, #CC0000 100%)',
-      starType: 'bronze_3_16',
-      specialDevice: 'bronze_a'
+      starType: 'bronze_3_16'
     },
     {
       id: 10, name: 'MCL Marine of the Year Ribbon — Department', shortName: 'MOY Department',
@@ -87,8 +83,7 @@ export class RibbonDataService {
       imageUrl: '10_MCL_Marine_of_the_Year_Ribbon_-_Department.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 8%, #000080 8%, #000080 16%, #CC0000 16%, #CC0000 24%, #FFD700 24%, #FFD700 76%, #CC0000 76%, #CC0000 84%, #000080 84%, #000080 92%, #CC0000 92%, #CC0000 100%)',
       starType: 'bronze_3_16',
-      orientation: 'red_inboard',
-      specialDevice: 'fmf'
+      orientation: 'red_inboard'
     },
 
     // ── Row 3: More MOY + Recruiters ──
@@ -98,24 +93,21 @@ export class RibbonDataService {
       imageUrl: '11_MCL_Associate_Member_of_the_Year_Ribbon_-_Department.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 8%, #000080 8%, #000080 16%, #CC0000 16%, #CC0000 24%, #FFD700 24%, #FFD700 76%, #CC0000 76%, #CC0000 84%, #000080 84%, #000080 92%, #CC0000 92%, #CC0000 100%)',
       starType: 'bronze_3_16',
-      orientation: 'red_inboard',
-      specialDevice: 'bronze_a'
+      orientation: 'red_inboard'
     },
     {
       id: 12, name: 'MCL Marine of the Year Ribbon — Detachment', shortName: 'MOY Detachment',
       category: 'mcl',
       imageUrl: '12_MCL_Marine_of_the_Year_Ribbon_-_Detachment.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 8%, #4169E1 8%, #4169E1 16%, #CC0000 16%, #CC0000 24%, #FFD700 24%, #FFD700 76%, #CC0000 76%, #CC0000 84%, #4169E1 84%, #4169E1 92%, #CC0000 92%, #CC0000 100%)',
-      starType: 'bronze_3_16',
-      specialDevice: 'fmf'
+      starType: 'bronze_3_16'
     },
     {
       id: 13, name: 'MCL Associate Member of the Year Ribbon — Detachment', shortName: 'AMOY Detachment',
       category: 'mcl',
       imageUrl: '13_MCL_Associate_Member_of_the_Year_Ribbon_-_Detachment.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 8%, #4169E1 8%, #4169E1 16%, #CC0000 16%, #CC0000 24%, #FFD700 24%, #FFD700 76%, #CC0000 76%, #CC0000 84%, #4169E1 84%, #4169E1 92%, #CC0000 92%, #CC0000 100%)',
-      starType: 'bronze_3_16',
-      specialDevice: 'bronze_a'
+      starType: 'bronze_3_16'
     },
     {
       id: 14, name: 'MCL National Recruiter — Gold Medal', shortName: 'Nat\'l Recruiter Gold',
