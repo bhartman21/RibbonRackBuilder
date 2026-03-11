@@ -1,0 +1,287 @@
+<header class="app-header">
+  <div class="header-content">
+    <div class="header-brand">
+      <div class="ega-emblem">☆</div>
+      <div class="header-text">
+        <h1>MCL / MODD Ribbon Rack Builder</h1>
+        <p class="header-subtitle">Marine Corps League &amp; Military Order of the Devil Dogs</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      @if (totalSelected() > 0) {
+        <span class="badge">{{ totalSelected() }} selected</span>
+        <button class="btn btn-outline" (click)="clearAll()">Clear All</button>
+        <button class="btn btn-primary" (click)="printRack()">
+          <span class="btn-icon">🖨</span> Print Rack
+        </button>
+      }
+    </div>
+  </div>
+</header>
+
+<main class="app-main">
+  <!-- LEFT PANEL: Award Selector -->
+  <aside class="selector-panel">
+    <div class="search-box">
+      <div class="info-group">
+        <label class="group-label">Ribbon Selector</label>
+        <input
+          type="text"
+          placeholder="Filter ribbons..."
+          [value]="searchQuery()"
+          (input)="onSearchInput($event)"
+          class="search-input"
+          id="search-awards"
+        />
+      </div>
+    </div>
+
+    <!-- MCL Awards Section -->
+    <div class="award-section">
+      <button class="section-header" (click)="toggleSection('mcl')" id="section-mcl">
+        <span class="section-chevron" [class.collapsed]="isSectionCollapsed('mcl')">▼</span>
+        <span class="section-title">MCL Awards</span>
+        <span class="section-count">{{ filteredMcl().length }}</span>
+      </button>
+      @if (!isSectionCollapsed('mcl')) {
+        <div class="section-body">
+          @for (ribbon of filteredMcl(); track ribbon.id) {
+            <div
+              class="award-item"
+              [class.selected]="isSelected(ribbon.id)"
+              (click)="toggleAward(ribbon)"
+              [id]="'award-' + ribbon.id"
+            >
+              <div class="award-ribbon-preview" [style]="getRibbonStyle(ribbon)"></div>
+              <div class="award-info">
+                <span class="award-name">{{ ribbon.shortName }}</span>
+              </div>
+              <div class="award-check">
+                @if (isSelected(ribbon.id)) {
+                  <span class="checkmark">✓</span>
+                }
+              </div>
+            </div>
+            @if (isSelected(ribbon.id)) {
+              <div class="award-controls" (click)="$event.stopPropagation()">
+                @if (ribbon.isMarksmanship) {
+                  <label class="control-label">Qualification:</label>
+                  <select
+                    class="qual-select"
+                    [value]="getMarksmanshipLevel(ribbon.id)"
+                    (change)="setMarksmanshipLevel(ribbon.id, $any($event.target).value)"
+                    [id]="'qual-' + ribbon.id"
+                  >
+                    <option value="marksman">Marksman</option>
+                    <option value="sharpshooter">Sharpshooter</option>
+                    <option value="expert">Expert</option>
+                    <option value="master">Master</option>
+                    <option value="high_master">High Master</option>
+                  </select>
+                } @else {
+                  <label class="control-label">Times Received:</label>
+                  <div class="count-controls">
+                    <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                    <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                    <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                  </div>
+                }
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <!-- MODD Awards Section -->
+    <div class="award-section">
+      <button class="section-header" (click)="toggleSection('modd')" id="section-modd">
+        <span class="section-chevron" [class.collapsed]="isSectionCollapsed('modd')">▼</span>
+        <span class="section-title">MODD Awards</span>
+        <span class="section-count">{{ filteredModd().length }}</span>
+      </button>
+      @if (!isSectionCollapsed('modd')) {
+        <div class="section-body">
+          @for (ribbon of filteredModd(); track ribbon.id) {
+            <div
+              class="award-item"
+              [class.selected]="isSelected(ribbon.id)"
+              (click)="toggleAward(ribbon)"
+              [id]="'award-' + ribbon.id"
+            >
+              <div class="award-ribbon-preview" [style]="getRibbonStyle(ribbon)"></div>
+              <div class="award-info">
+                <span class="award-name">{{ ribbon.shortName }}</span>
+              </div>
+              <div class="award-check">
+                @if (isSelected(ribbon.id)) {
+                  <span class="checkmark">✓</span>
+                }
+              </div>
+            </div>
+            @if (isSelected(ribbon.id)) {
+              <div class="award-controls" (click)="$event.stopPropagation()">
+                <label class="control-label">Times Received:</label>
+                <div class="count-controls">
+                  <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                  <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                  <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Convention Awards Section -->
+    <div class="award-section">
+      <button class="section-header" (click)="toggleSection('convention')" id="section-convention">
+        <span class="section-chevron" [class.collapsed]="isSectionCollapsed('convention')">▼</span>
+        <span class="section-title">Convention &amp; Anniversary Awards</span>
+        <span class="section-count">{{ filteredConvention().length }}</span>
+      </button>
+      @if (!isSectionCollapsed('convention')) {
+        <div class="section-body">
+          @for (ribbon of filteredConvention(); track ribbon.id) {
+            <div
+              class="award-item"
+              [class.selected]="isSelected(ribbon.id)"
+              (click)="toggleAward(ribbon)"
+              [id]="'award-' + ribbon.id"
+            >
+              <div class="award-ribbon-preview" [style]="getRibbonStyle(ribbon)"></div>
+              <div class="award-info">
+                <span class="award-name">{{ ribbon.shortName }}</span>
+              </div>
+              <div class="award-check">
+                @if (isSelected(ribbon.id)) {
+                  <span class="checkmark">✓</span>
+                }
+              </div>
+            </div>
+            @if (isSelected(ribbon.id)) {
+              <div class="award-controls" (click)="$event.stopPropagation()">
+                <label class="control-label">Times Received:</label>
+                <div class="count-controls">
+                  <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                  <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                  <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+  </aside>
+
+  <!-- RIGHT PANEL: Ribbon Rack Display -->
+  <section class="rack-panel">
+    <div class="rack-container">
+      <!-- Inputs for the document (Screen Only) -->
+      <div class="info-inputs no-print">
+        <div class="info-group">
+          <label class="group-label">Member Information</label>
+          <input type="text" placeholder="Member Full Name" [value]="memberName()" (input)="memberName.set($any($event.target).value)" class="search-input mb-2" />
+          <input type="text" placeholder="Detachment Name" [value]="detachmentName()" (input)="detachmentName.set($any($event.target).value)" class="search-input mb-2" />
+          <div class="input-row">
+            <input type="text" placeholder="No." [value]="detachmentNumber()" (input)="detachmentNumber.set($any($event.target).value)" class="search-input small" />
+            <input type="text" placeholder="Location (City, ST)" [value]="detachmentLocation()" (input)="detachmentLocation.set($any($event.target).value)" class="search-input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="rack-header">
+        <h2 class="rack-title">MCL / MODD Ribbon Rack</h2>
+        @if (memberName() || detachmentName()) {
+          <div class="member-info-display">
+            @if (memberName()) {
+              <div class="member-name">{{ memberName() }}</div>
+            }
+            @if (detachmentName() || detachmentNumber() || detachmentLocation()) {
+              <div class="detachment-info">
+                {{ detachmentName() }} 
+                @if (detachmentNumber()) { #{{ detachmentNumber() }} }
+                @if (detachmentLocation()) { — {{ detachmentLocation() }} }
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (rackRows().length === 0) {
+        <div class="rack-empty">
+          <div class="empty-icon">🎖</div>
+          <p>Select awards from the left panel to build your ribbon rack.</p>
+          <p class="empty-hint">Ribbons will be arranged in the proper order of precedence.</p>
+        </div>
+      } @else {
+        <div class="ribbon-rack" id="ribbon-rack">
+          @for (row of rackRows(); track $index; let isFirst = $first) {
+            <div
+              class="rack-row"
+              [class.centered]="isFirst && row.length < 3"
+            >
+              @for (award of row; track award.ribbon.id) {
+                <div class="rack-ribbon-wrapper">
+                  <div
+                    class="rack-ribbon"
+                    [style]="getRibbonStyle(award.ribbon)"
+                    [title]="award.ribbon.name"
+                  >
+                    <!-- Star devices overlay -->
+                    @if (getStarArray(award).length > 0) {
+                      <div class="star-overlay">
+                        @for (star of getStarArray(award); track $index) {
+                          <span
+                            class="star-device"
+                            [class.star-gold]="star.type === 'gold'"
+                            [class.star-silver]="star.type === 'silver'"
+                            [class.star-bronze]="star.type === 'bronze'"
+                            [class.star-large]="star.size === 'large'"
+                            [class.star-small]="star.size === 'small'"
+                          >★</span>
+                        }
+                      </div>
+                    }
+                    <!-- Special devices -->
+                    @if (award.ribbon.specialDevice === 'fmf') {
+                      <div class="special-device fmf-device" title="FMF Device">⚓</div>
+                    }
+                    @if (award.ribbon.specialDevice === 'bronze_a') {
+                      <div class="special-device a-device" title="Bronze 'A' Device">A</div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Legend -->
+        <div class="rack-legend">
+          <h3>Rack Details</h3>
+          <div class="legend-items">
+            @for (award of rackAwards(); track award.ribbon.id) {
+              <div class="legend-item">
+                <div class="legend-ribbon" [style]="getRibbonStyle(award.ribbon)"></div>
+                <span class="legend-name">{{ award.ribbon.name }}</span>
+                @if (award.count > 1) {
+                  <span class="legend-count">(×{{ award.count }})</span>
+                }
+                @if (award.marksmanshipLevel) {
+                  <span class="legend-qual">— {{ award.marksmanshipLevel | titlecase }}</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Based on the MCL Ribbon Precedence Chart (Rev 10/2023) &amp; Enclosure 4 (2025 NAP)</p>
+</footer>
