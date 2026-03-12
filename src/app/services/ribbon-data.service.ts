@@ -16,8 +16,7 @@ export class RibbonDataService {
       category: 'mcl',
       imageUrl: '01_MCL_Hero_Medal.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 15%, #FFD700 15%, #FFD700 30%, #FFFFFF 30%, #FFFFFF 50%, #FFD700 50%, #FFD700 65%, #CC0000 65%, #CC0000 80%, #000000 80%, #000000 100%)',
-      starType: 'gold_5_16',
-      singleIssue: true
+      starType: 'gold_5_16'
     },
     {
       id: 2, name: 'MCL Distinguished Citizen — Gold Medal', shortName: 'Distinguished Citizen Gold',
