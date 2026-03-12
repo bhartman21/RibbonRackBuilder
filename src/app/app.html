@@ -160,14 +160,22 @@
                 }
               </div>
             </div>
-            @if (isSelected(ribbon.id) && !ribbon.singleIssue) {
+            @if (isSelected(ribbon.id) && (!ribbon.singleIssue || ribbon.hasFrame)) {
               <div class="award-controls" (click)="$event.stopPropagation()">
-                <label class="control-label">Times Received:</label>
-                <div class="count-controls">
-                  <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
-                  <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
-                  <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
-                </div>
+                @if (!ribbon.singleIssue) {
+                  <label class="control-label">Times Received:</label>
+                  <div class="count-controls">
+                    <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                    <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                    <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                  </div>
+                }
+                @if (ribbon.hasFrame) {
+                  <label class="control-label checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; cursor: pointer;">
+                    <input type="checkbox" [checked]="isFramed(ribbon.id)" (change)="setFramed(ribbon.id, $any($event.target).checked)">
+                    Gold Frame
+                  </label>
+                }
               </div>
             }
           }
@@ -227,6 +235,7 @@
                 <div class="rack-ribbon-wrapper">
                   <div
                     class="rack-ribbon"
+                    [class.framed]="award.isFramed"
                     [style]="getRibbonStyle(award.ribbon)"
                     [title]="award.ribbon.name"
                   >
@@ -265,10 +274,10 @@
           <div class="legend-items">
             @for (award of rackAwards(); track award.ribbon.id) {
               <div class="legend-item">
-                <div class="legend-ribbon" [style]="getRibbonStyle(award.ribbon)"></div>
+                <div class="legend-ribbon" [class.framed]="award.isFramed" [style]="getRibbonStyle(award.ribbon)"></div>
                 <div class="legend-text-content">
                   <div class="legend-title-row">
-                    <span class="legend-name">{{ getLegendName(award.ribbon) }}</span>
+                    <span class="legend-name">{{ getLegendName(award.ribbon, award) }}</span>
                     @if (award.count > 1) {
                       <span class="legend-count">(×{{ award.count }})</span>
                     }

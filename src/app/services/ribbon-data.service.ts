@@ -357,35 +357,40 @@ export class RibbonDataService {
       imageUrl: '46_MCL_100th_Anniversary_Ribbon.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 20%, #FFD700 20%, #FFD700 40%, #CC0000 40%, #CC0000 60%, #FFD700 60%, #FFD700 80%, #CC0000 80%, #CC0000 100%)',
       starType: 'bronze_3_16',
-      singleIssue: true
+      singleIssue: true,
+      hasFrame: true
     },
     {
       id: 47, name: 'MCL 75th National Convention — Silver Medal', shortName: '75th Convention Silver',
       category: 'convention',
       imageUrl: '47_MCL_75th_National_Convention_-_Silver_Medal.png',
       cssGradient: 'linear-gradient(to right, #FFD700 0%, #FFD700 15%, #000080 15%, #000080 35%, #FFD700 35%, #FFD700 50%, #CC0000 50%, #CC0000 65%, #000080 65%, #000080 85%, #FFD700 85%, #FFD700 100%)',
-      starType: 'bronze_3_16'
+      starType: 'bronze_3_16',
+      singleIssue: true
     },
     {
       id: 48, name: 'MCL 75th National Convention — Bronze Medal', shortName: '75th Convention Bronze',
       category: 'convention',
       imageUrl: '48_MCL_75th_National_Convention_-_Bronze_Medal.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 15%, #000080 15%, #000080 30%, #CC0000 30%, #CC0000 45%, #FFD700 45%, #FFD700 55%, #CC0000 55%, #CC0000 70%, #000080 70%, #000080 85%, #CC0000 85%, #CC0000 100%)',
-      starType: 'bronze_3_16'
+      starType: 'bronze_3_16',
+      singleIssue: true
     },
     {
       id: 49, name: 'MCL 50th National Convention — Silver Medal', shortName: '50th Convention Silver',
       category: 'convention',
       imageUrl: '49_MCL_50th_National_Convention_-_Silver_Medal.png',
       cssGradient: 'linear-gradient(to right, #FFD700 0%, #FFD700 20%, #000080 20%, #000080 40%, #FFD700 40%, #FFD700 60%, #000080 60%, #000080 80%, #FFD700 80%, #FFD700 100%)',
-      starType: 'bronze_3_16'
+      starType: 'bronze_3_16',
+      singleIssue: true
     },
     {
       id: 50, name: 'MCL 50th National Convention — Bronze Medal', shortName: '50th Convention Bronze',
       category: 'convention',
       imageUrl: '50_MCL_50th_National_Convention_-_Bronze_Medal.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 15%, #FFD700 15%, #FFD700 30%, #000080 30%, #000080 45%, #FFD700 45%, #FFD700 55%, #000080 55%, #000080 70%, #FFD700 70%, #FFD700 85%, #CC0000 85%, #CC0000 100%)',
-      starType: 'bronze_3_16'
+      starType: 'bronze_3_16',
+      singleIssue: true
     },
   ];
 

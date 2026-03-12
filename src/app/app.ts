@@ -123,6 +123,18 @@ export class App {
     this.selectedAwards.set(map);
   }
 
+  setFramed(ribbonId: number, isFramed: boolean): void {
+    const map = new Map(this.selectedAwards());
+    const award = map.get(ribbonId);
+    if (!award) return;
+    map.set(ribbonId, { ...award, isFramed });
+    this.selectedAwards.set(map);
+  }
+
+  isFramed(ribbonId: number): boolean {
+    return this.selectedAwards().get(ribbonId)?.isFramed ?? false;
+  }
+
   getStars(award: SelectedAward): StarDevice[] {
     return this.starCalc.calculateStars(award);
   }
@@ -138,8 +150,9 @@ export class App {
     return result;
   }
 
-  getLegendName(ribbon: Ribbon): string {
-    return ribbon.name.includes('Medal') ? `* ${ribbon.name}` : ribbon.name;
+  getLegendName(ribbon: Ribbon, award: SelectedAward): string {
+    const base = ribbon.name.includes('Medal') ? `* ${ribbon.name}` : ribbon.name;
+    return award.isFramed ? `${base} (w/ Gold Frame)` : base;
   }
 
   getStarsDescription(award: SelectedAward): string {

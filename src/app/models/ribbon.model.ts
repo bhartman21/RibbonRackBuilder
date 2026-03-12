@@ -10,12 +10,14 @@ export interface Ribbon {
   specialDevice?: 'fmf' | 'bronze_a';
   isMarksmanship?: boolean;
   singleIssue?: boolean;
+  hasFrame?: boolean;
 }
 
 export interface SelectedAward {
   ribbon: Ribbon;
   count: number;
   marksmanshipLevel?: 'marksman' | 'sharpshooter' | 'expert' | 'master' | 'high_master';
+  isFramed?: boolean;
 }
 
 export interface StarDevice {
