@@ -16,7 +16,8 @@ export class RibbonDataService {
       category: 'mcl',
       imageUrl: '01_MCL_Hero_Medal.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 15%, #FFD700 15%, #FFD700 30%, #FFFFFF 30%, #FFFFFF 50%, #FFD700 50%, #FFD700 65%, #CC0000 65%, #CC0000 80%, #000000 80%, #000000 100%)',
-      starType: 'gold_5_16'
+      starType: 'gold_5_16',
+      singleIssue: true
     },
     {
       id: 2, name: 'MCL Distinguished Citizen — Gold Medal', shortName: 'Distinguished Citizen Gold',
@@ -356,7 +357,8 @@ export class RibbonDataService {
       category: 'convention',
       imageUrl: '46_MCL_100th_Anniversary_Ribbon.png',
       cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 20%, #FFD700 20%, #FFD700 40%, #CC0000 40%, #CC0000 60%, #FFD700 60%, #FFD700 80%, #CC0000 80%, #CC0000 100%)',
-      starType: 'bronze_3_16'
+      starType: 'bronze_3_16',
+      singleIssue: true
     },
     {
       id: 47, name: 'MCL 75th National Convention — Silver Medal', shortName: '75th Convention Silver',

@@ -78,7 +78,7 @@
                     <option value="master">Master</option>
                     <option value="high_master">High Master</option>
                   </select>
-                } @else {
+                } @else if (!ribbon.singleIssue) {
                   <label class="control-label">Times Received:</label>
                   <div class="count-controls">
                     <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
@@ -119,7 +119,7 @@
                 }
               </div>
             </div>
-            @if (isSelected(ribbon.id)) {
+            @if (isSelected(ribbon.id) && !ribbon.singleIssue) {
               <div class="award-controls" (click)="$event.stopPropagation()">
                 <label class="control-label">Times Received:</label>
                 <div class="count-controls">
@@ -160,7 +160,7 @@
                 }
               </div>
             </div>
-            @if (isSelected(ribbon.id)) {
+            @if (isSelected(ribbon.id) && !ribbon.singleIssue) {
               <div class="award-controls" (click)="$event.stopPropagation()">
                 <label class="control-label">Times Received:</label>
                 <div class="count-controls">
@@ -266,16 +266,24 @@
             @for (award of rackAwards(); track award.ribbon.id) {
               <div class="legend-item">
                 <div class="legend-ribbon" [style]="getRibbonStyle(award.ribbon)"></div>
-                <span class="legend-name">{{ award.ribbon.name }}</span>
-                @if (award.count > 1) {
-                  <span class="legend-count">(×{{ award.count }})</span>
-                }
-                @if (award.marksmanshipLevel) {
-                  <span class="legend-qual">— {{ award.marksmanshipLevel | titlecase }}</span>
-                }
+                <div class="legend-text-content">
+                  <div class="legend-title-row">
+                    <span class="legend-name">{{ getLegendName(award.ribbon) }}</span>
+                    @if (award.count > 1) {
+                      <span class="legend-count">(×{{ award.count }})</span>
+                    }
+                    @if (award.marksmanshipLevel) {
+                      <span class="legend-qual">— {{ award.marksmanshipLevel | titlecase }}</span>
+                    }
+                  </div>
+                  @if (getStarsDescription(award)) {
+                    <div class="legend-stars-desc">{{ getStarsDescription(award) }}</div>
+                  }
+                </div>
               </div>
             }
           </div>
+          <p class="legend-note">* Indicates award includes a medal</p>
         </div>
       }
     </div>

@@ -138,6 +138,21 @@ export class App {
     return result;
   }
 
+  getLegendName(ribbon: Ribbon): string {
+    return ribbon.name.includes('Medal') ? `* ${ribbon.name}` : ribbon.name;
+  }
+
+  getStarsDescription(award: SelectedAward): string {
+    const devices = this.getStars(award);
+    if (devices.length === 0) return '';
+    
+    return devices.map(d => {
+      const sizeStr = d.size === 'large' ? '5/16"' : '3/16"';
+      const typeStr = d.type.charAt(0).toUpperCase() + d.type.slice(1);
+      return `${d.count}x ${sizeStr} ${typeStr} Star${d.count > 1 ? 's' : ''}`;
+    }).join(', ');
+  }
+
   toggleSection(section: string): void {
     const sections = new Set(this.collapsedSections());
     if (sections.has(section)) {

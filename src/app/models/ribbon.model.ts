@@ -9,6 +9,7 @@ export interface Ribbon {
   orientation?: 'blue_inboard' | 'red_inboard';
   specialDevice?: 'fmf' | 'bronze_a';
   isMarksmanship?: boolean;
+  singleIssue?: boolean;
 }
 
 export interface SelectedAward {
