@@ -182,6 +182,55 @@
         </div>
       }
     </div>
+
+    <!-- State Awards Section -->
+    <div class="award-section">
+      <button class="section-header" (click)="toggleSection('state')" id="section-state">
+        <span class="section-chevron" [class.collapsed]="isSectionCollapsed('state')">▼</span>
+        <span class="section-title">State Awards</span>
+        <span class="section-count">{{ filteredState().length }}</span>
+      </button>
+      @if (!isSectionCollapsed('state')) {
+        <div class="section-body">
+          @for (ribbon of filteredState(); track ribbon.id) {
+            <div
+              class="award-item"
+              [class.selected]="isSelected(ribbon.id)"
+              (click)="toggleAward(ribbon)"
+              [id]="'award-' + ribbon.id"
+            >
+              <div class="award-ribbon-preview" [style]="getRibbonStyle(ribbon)"></div>
+              <div class="award-info">
+                <span class="award-name">{{ ribbon.shortName }}</span>
+              </div>
+              <div class="award-check">
+                @if (isSelected(ribbon.id)) {
+                  <span class="checkmark">✓</span>
+                }
+              </div>
+            </div>
+            @if (isSelected(ribbon.id) && (!ribbon.singleIssue || ribbon.hasFrame)) {
+              <div class="award-controls" (click)="$event.stopPropagation()">
+                @if (!ribbon.singleIssue) {
+                  <label class="control-label">Times Received:</label>
+                  <div class="count-controls">
+                    <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                    <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                    <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                  </div>
+                }
+                @if (ribbon.hasFrame) {
+                  <label class="control-label checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; cursor: pointer;">
+                    <input type="checkbox" [checked]="isFramed(ribbon.id)" (change)="setFramed(ribbon.id, $any($event.target).checked)">
+                    Gold Frame
+                  </label>
+                }
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
   </aside>
 
   <!-- RIGHT PANEL: Ribbon Rack Display -->

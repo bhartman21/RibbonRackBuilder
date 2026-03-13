@@ -18,6 +18,7 @@ export class App {
   readonly mclRibbons = this.ribbonData.getRibbonsByCategory('mcl');
   readonly moddRibbons = this.ribbonData.getRibbonsByCategory('modd');
   readonly conventionRibbons = this.ribbonData.getRibbonsByCategory('convention');
+  readonly stateRibbons = this.ribbonData.getRibbonsByCategory('state');
 
   // Track selected awards: Map<ribbonId, SelectedAward>
   readonly selectedAwards = signal<Map<number, SelectedAward>>(new Map());
@@ -38,6 +39,7 @@ export class App {
   readonly filteredMcl = computed(() => this.filterRibbons(this.mclRibbons));
   readonly filteredModd = computed(() => this.filterRibbons(this.moddRibbons));
   readonly filteredConvention = computed(() => this.filterRibbons(this.conventionRibbons));
+  readonly filteredState = computed(() => this.filterRibbons(this.stateRibbons));
 
   // Sorted selected awards for rack display
   readonly rackAwards = computed(() => {

@@ -392,9 +392,17 @@ export class RibbonDataService {
       starType: 'bronze_3_16',
       singleIssue: true
     },
+    {
+      id: 51, name: 'Florida 75th Anniversary Ribbon', shortName: 'Florida 75th Anniversary',
+      category: 'state',
+      imageUrl: 'FL_01_75_Anniversary_Ribbon.png',
+      cssGradient: 'linear-gradient(to right, #CC0000 0%, #CC0000 15%, #FFD700 15%, #FFD700 30%, #000080 30%, #000080 45%, #FFD700 45%, #FFD700 55%, #000080 55%, #000080 70%, #FFD700 70%, #FFD700 85%, #CC0000 85%, #CC0000 100%)',
+      starType: 'bronze_3_16',
+      singleIssue: true
+    }
   ];
 
-  getRibbonsByCategory(category: 'mcl' | 'modd' | 'convention'): Ribbon[] {
+  getRibbonsByCategory(category: 'mcl' | 'modd' | 'convention' | 'state'): Ribbon[] {
     return this.ribbons.filter(r => r.category === category);
   }
 

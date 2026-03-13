@@ -2,7 +2,7 @@ export interface Ribbon {
   id: number;
   name: string;
   shortName: string;
-  category: 'mcl' | 'modd' | 'convention';
+  category: 'mcl' | 'modd' | 'convention' | 'state';
   imageUrl: string;
   cssGradient?: string;
   starType: 'gold_5_16' | 'bronze_3_16';
