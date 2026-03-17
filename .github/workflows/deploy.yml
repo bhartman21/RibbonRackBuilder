@@ -1,10 +1,9 @@
-name: Build and Deploy
+name: Deploy to GitHub Pages
+
 on:
   push:
-    branches:
-      - main
-permissions:
-  contents: write
+    branches: [ main ]
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -15,16 +14,20 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
           cache: 'npm'
 
-      - name: Install and Build
-        run: |
-          npm install
-          npx ng build --configuration production --base-href ./
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Inject Firebase Config
+        run: echo "${{ secrets.FIREBASE_CONFIG }}" > src/app/firebase-config.ts
+
+      - name: Build
+        run: npx ng build --base-href=/RibbonRackBuilder/
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/RibbonRackBuilder/browser
+          branch: gh-pages
+          folder: dist/RibbonRackBuilder/browser

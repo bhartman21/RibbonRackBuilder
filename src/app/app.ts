@@ -1,8 +1,11 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { RibbonDataService } from './services/ribbon-data.service';
 import { StarCalculatorService } from './services/star-calculator.service';
-import { Ribbon, SelectedAward, StarDevice } from './models/ribbon.model';
+import { ProfileService } from './services/profile.service';
+import { AuthService } from './services/auth.service';
+import { Ribbon, SelectedAward, StarDevice, UserRackProfile } from './models/ribbon.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +13,15 @@ import { Ribbon, SelectedAward, StarDevice } from './models/ribbon.model';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   private ribbonData = inject(RibbonDataService);
   private starCalc = inject(StarCalculatorService);
+  private profileService = inject(ProfileService);
+  private authService = inject(AuthService);
+
+  readonly user = toSignal(this.authService.user$);
+  readonly authEmail = signal('');
+  readonly isAuthLoading = signal(false);
 
   readonly allRibbons = this.ribbonData.ribbons;
   readonly mclRibbons = this.ribbonData.getRibbonsByCategory('mcl');
@@ -31,6 +40,9 @@ export class App {
   readonly detachmentName = signal('');
   readonly detachmentNumber = signal('');
   readonly detachmentLocation = signal('');
+  readonly mclProfileId = signal('');
+  readonly email = signal('');
+  readonly phone = signal('');
 
   // Collapsed sections
   readonly collapsedSections = signal<Set<string>>(new Set());
@@ -40,6 +52,11 @@ export class App {
   readonly filteredModd = computed(() => this.filterRibbons(this.moddRibbons));
   readonly filteredConvention = computed(() => this.filterRibbons(this.conventionRibbons));
   readonly filteredState = computed(() => this.filterRibbons(this.stateRibbons));
+
+  async ngOnInit(): Promise<void> {
+    // Check if we're landing from an auth link
+    await this.authService.completeSignIn();
+  }
 
   // Sorted selected awards for rack display
   readonly rackAwards = computed(() => {
@@ -160,7 +177,7 @@ export class App {
   getStarsDescription(award: SelectedAward): string {
     const devices = this.getStars(award);
     if (devices.length === 0) return '';
-    
+
     return devices.map(d => {
       const sizeStr = d.size === 'large' ? '5/16"' : '3/16"';
       const typeStr = d.type.charAt(0).toUpperCase() + d.type.slice(1);
@@ -184,6 +201,123 @@ export class App {
 
   clearAll(): void {
     this.selectedAwards.set(new Map());
+  }
+
+  async login(): Promise<void> {
+    const email = this.authEmail().trim();
+    if (!email) {
+      alert('Please enter your email address.');
+      return;
+    }
+
+    this.isAuthLoading.set(true);
+    try {
+      await this.authService.sendSignInLink(email);
+      alert(`A sign-in link has been sent to ${email}. Please check your inbox.`);
+    } catch (error) {
+      alert('Failed to send sign-in link. Please try again.');
+    } finally {
+      this.isAuthLoading.set(false);
+    }
+  }
+
+  async logout(): Promise<void> {
+    try {
+      await this.authService.logout();
+    } catch (error) {
+      alert('Failed to log out.');
+    }
+  }
+
+  async loadUserRack(): Promise<void> {
+    const id = this.mclProfileId().trim();
+    if (!id) {
+      alert('Please enter a Profile ID to load.');
+      return;
+    }
+
+    try {
+      const profile = await this.profileService.getProfile(id);
+      if (profile) {
+        // Load data into signals
+        this.memberName.set(profile.memberName);
+        this.detachmentName.set(profile.detachmentName);
+        this.detachmentNumber.set(profile.detachmentNumber);
+        this.detachmentLocation.set(profile.detachmentLocation);
+        this.email.set(profile.email || '');
+        this.phone.set(profile.phone || '');
+
+        // Load awards
+        const awardMap = new Map<number, SelectedAward>();
+        for (const a of profile.awards) {
+          const ribbon = this.allRibbons.find(r => r.id === a.ribbonId);
+          if (ribbon) {
+            awardMap.set(a.ribbonId, {
+              ribbon,
+              count: a.count,
+              marksmanshipLevel: a.marksmanshipLevel,
+              isFramed: a.isFramed
+            });
+          }
+        }
+        this.selectedAwards.set(awardMap);
+        //alert('Rack loaded successfully!');
+      } else {
+        alert('No profile found for this ID.');
+      }
+    } catch (error) {
+      console.error('Error loading rack:', error);
+      alert('Failed to load rack. Please check your connection.');
+    }
+  }
+
+  async saveUserRack(): Promise<void> {
+    const id = this.mclProfileId().trim();
+    if (!id) {
+      alert('Please enter a Profile ID to save.');
+      return;
+    }
+
+    const awards = Array.from(this.selectedAwards().values()).map(a => {
+      const item: any = {
+        ribbonId: Number(a.ribbon.id),
+        count: Number(a.count) || 1
+      };
+      if (a.marksmanshipLevel) {
+        item.marksmanshipLevel = String(a.marksmanshipLevel);
+      }
+      if (typeof a.isFramed === 'boolean') {
+        item.isFramed = a.isFramed;
+      }
+      return item;
+    });
+
+    const profileData: any = {
+      profileId: String(id),
+      memberName: String(this.memberName() || ''),
+      detachmentName: String(this.detachmentName() || ''),
+      detachmentNumber: String(this.detachmentNumber() || ''),
+      detachmentLocation: String(this.detachmentLocation() || ''),
+      email: String(this.email() || ''),
+      phone: String(this.phone() || ''),
+      awards: awards
+    };
+
+    // Final safety check: remove any keys that are still undefined
+    Object.keys(profileData).forEach(key => {
+      if (profileData[key] === undefined) {
+        delete profileData[key];
+      }
+    });
+
+    try {
+      console.log('Attempting to save profile data:', profileData);
+      await this.profileService.saveProfile(profileData);
+      alert('Rack saved to database successfully!');
+    } catch (error) {
+      console.error('Error saving rack:', error);
+      alert('Failed to save rack. Please check the console for details.');
+    }
   }
 
   onSearchInput(event: Event): void {

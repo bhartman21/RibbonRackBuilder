@@ -8,12 +8,42 @@
       </div>
     </div>
     <div class="header-actions">
+      <!-- Auth Section -->
+      <div class="auth-section">
+        @if (user()) {
+          <div class="user-info">
+            <span class="user-email">{{ user()?.email }}</span>
+            <button class="btn btn-outline btn-sm" (click)="logout()">Logout</button>
+          </div>
+        } @else {
+          <div class="login-form">
+            <input 
+              type="email" 
+              placeholder="Enter email to login" 
+              [value]="authEmail()"
+              (input)="authEmail.set($any($event.target).value)"
+              class="search-input small"
+              (keyup.enter)="login()"
+            />
+            <button 
+              class="btn btn-primary btn-sm" 
+              (click)="login()"
+              [disabled]="isAuthLoading() || !authEmail()"
+            >
+              {{ isAuthLoading() ? 'Sending...' : 'Login' }}
+            </button>
+          </div>
+        }
+      </div>
+
       @if (totalSelected() > 0) {
-        <span class="badge">{{ totalSelected() }} selected</span>
-        <button class="btn btn-outline" (click)="clearAll()">Clear All</button>
-        <button class="btn btn-primary" (click)="printRack()">
-          <span class="btn-icon">🖨</span> Print Rack
-        </button>
+        <div class="rack-actions">
+          <span class="badge">{{ totalSelected() }} selected</span>
+          <button class="btn btn-outline btn-sm" (click)="clearAll()">Clear All</button>
+          <button class="btn btn-primary btn-sm" (click)="printRack()">
+            <span class="btn-icon">🖨</span> Print Rack
+          </button>
+        </div>
       }
     </div>
   </div>
@@ -246,6 +276,17 @@
             <input type="text" placeholder="No." [value]="detachmentNumber()" (input)="detachmentNumber.set($any($event.target).value)" class="search-input small" />
             <input type="text" placeholder="Location (City, ST)" [value]="detachmentLocation()" (input)="detachmentLocation.set($any($event.target).value)" class="search-input" />
           </div>
+          <div class="input-row mt-2 mb-2">
+            <input type="text" placeholder="MCL ProfileID" [value]="mclProfileId()" (input)="mclProfileId.set($any($event.target).value)" class="search-input" />
+            <div class="btn-group">
+              <button class="btn btn-outline" (click)="loadUserRack()" [disabled]="!mclProfileId()">Load</button>
+              <button class="btn btn-primary" (click)="saveUserRack()" [disabled]="!mclProfileId()">Save</button>
+            </div>
+          </div>
+          <div class="input-row">
+            <input type="email" placeholder="Email (Optional)" [value]="email()" (input)="email.set($any($event.target).value)" class="search-input" />
+            <input type="tel" placeholder="Phone (Optional)" [value]="phone()" (input)="phone.set($any($event.target).value)" class="search-input" />
+          </div>
         </div>
       </div>
 
@@ -261,6 +302,16 @@
                 {{ detachmentName() }} 
                 @if (detachmentNumber()) { #{{ detachmentNumber() }} }
                 @if (detachmentLocation()) { — {{ detachmentLocation() }} }
+              </div>
+            }
+            @if (mclProfileId()) {
+              <div class="profile-info">Profile ID: {{ mclProfileId() }}</div>
+            }
+            @if (email() || phone()) {
+              <div class="contact-info">
+                @if (email()) { <span class="contact-email">{{ email() }}</span> }
+                @if (email() && phone()) { | }
+                @if (phone()) { <span class="contact-phone">{{ phone() }}</span> }
               </div>
             }
           </div>

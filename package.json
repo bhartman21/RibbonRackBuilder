@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build && firebase deploy",
+    "gh-deploy": "ng build --base-href=/RibbonRackBuilder/ && npx angular-cli-ghpages --dir=dist/RibbonRackBuilder/browser"
   },
   "private": true,
   "packageManager": "npm@11.7.0",
@@ -14,9 +16,11 @@
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
     "@angular/core": "^21.2.0",
+    "@angular/fire": "^20.0.1",
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "firebase": "^12.10.0",
     "rxjs": "~7.8.0",
     "sharp": "^0.34.5",
     "tslib": "^2.3.0"
@@ -25,6 +29,7 @@
     "@angular/build": "^21.2.1",
     "@angular/cli": "^21.2.1",
     "@angular/compiler-cli": "^21.2.0",
+    "angular-cli-ghpages": "^3.0.2",
     "prettier": "^3.8.1",
     "typescript": "~5.9.2"
   }

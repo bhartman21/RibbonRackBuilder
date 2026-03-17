@@ -25,3 +25,20 @@ export interface StarDevice {
   size: 'large' | 'small';  // large = 5/16", small = 3/16"
   count: number;
 }
+
+export interface UserRackProfile {
+  profileId: string;
+  memberName: string;
+  detachmentName: string;
+  detachmentNumber: string;
+  detachmentLocation: string;
+  email?: string;
+  phone?: string;
+  awards: {
+    ribbonId: number;
+    count: number;
+    marksmanshipLevel?: SelectedAward['marksmanshipLevel'];
+    isFramed?: boolean;
+  }[];
+  updatedAt: any; // Firestore Timestamp
+}
