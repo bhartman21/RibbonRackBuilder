@@ -1,11 +1,20 @@
 <header class="app-header">
   <div class="header-content">
-    <div class="header-brand">
-      <div class="ega-emblem">☆</div>
-      <div class="header-text">
-        <h1>MCL / MODD Ribbon Rack Builder</h1>
-        <p class="header-subtitle">Marine Corps League &amp; Military Order of the Devil Dogs</p>
+    <div class="header-top-row">
+      <div class="header-brand">
+        <div class="ega-emblem">☆</div>
+        <div class="header-text">
+          <h1>MCL / MODD Ribbon Rack Builder</h1>
+          <p class="header-subtitle">Marine Corps League &amp; Military Order of the Devil Dogs</p>
+        </div>
       </div>
+      <button class="mobile-toggle-btn" (click)="toggleSelector()" aria-label="Toggle ribbon selector">
+        @if (selectorOpen()) {
+          <span>✕</span>
+        } @else {
+          <span>☰</span>
+        }
+      </button>
     </div>
     <div class="header-actions">
       <!-- Auth Section -->
@@ -19,7 +28,7 @@
           <div class="login-form">
             <input 
               type="email" 
-              placeholder="Enter email to login" 
+              placeholder="Email to sign in or sign up" 
               [value]="authEmail()"
               (input)="authEmail.set($any($event.target).value)"
               class="search-input small"
@@ -30,9 +39,12 @@
               (click)="login()"
               [disabled]="isAuthLoading() || !authEmail()"
             >
-              {{ isAuthLoading() ? 'Sending...' : 'Login' }}
+              {{ isAuthLoading() ? 'Sending...' : 'Sign In' }}
             </button>
           </div>
+          @if (authError()) {
+            <div class="auth-error">{{ authError() }}</div>
+          }
         }
       </div>
 
@@ -51,7 +63,9 @@
 
 <main class="app-main">
   <!-- LEFT PANEL: Award Selector -->
-  <aside class="selector-panel">
+  <aside class="selector-panel" [class.open]="selectorOpen()">
+    <!-- Mobile close hint -->
+    <button class="mobile-panel-close" (click)="toggleSelector()">✕ Close Selector</button>
     <div class="search-box">
       <div class="info-group">
         <label class="group-label">Ribbon Selector</label>
@@ -321,7 +335,7 @@
       @if (rackRows().length === 0) {
         <div class="rack-empty">
           <div class="empty-icon">🎖</div>
-          <p>Select awards from the left panel to build your ribbon rack.</p>
+          <p>Select awards from the panel to build your ribbon rack.</p>
           <p class="empty-hint">Ribbons will be arranged in the proper order of precedence.</p>
         </div>
       } @else {

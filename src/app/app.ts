@@ -22,6 +22,8 @@ export class App implements OnInit {
   readonly user = toSignal(this.authService.user$);
   readonly authEmail = signal('');
   readonly isAuthLoading = signal(false);
+  readonly authError = signal('');
+  readonly selectorOpen = signal(false);
 
   readonly allRibbons = this.ribbonData.ribbons;
   readonly mclRibbons = this.ribbonData.getRibbonsByCategory('mcl');
@@ -55,7 +57,12 @@ export class App implements OnInit {
 
   async ngOnInit(): Promise<void> {
     // Check if we're landing from an auth link
-    await this.authService.completeSignIn();
+    try {
+      await this.authService.completeSignIn();
+    } catch (error: any) {
+      const msg = error?.message || 'Failed to complete sign-in. Please try again.';
+      this.authError.set(msg);
+    }
   }
 
   // Sorted selected awards for rack display
@@ -203,19 +210,27 @@ export class App implements OnInit {
     this.selectedAwards.set(new Map());
   }
 
+  toggleSelector(): void {
+    this.selectorOpen.update(v => !v);
+  }
+
   async login(): Promise<void> {
     const email = this.authEmail().trim();
     if (!email) {
-      alert('Please enter your email address.');
+      this.authError.set('Please enter your email address.');
       return;
     }
 
+    this.authError.set('');
     this.isAuthLoading.set(true);
     try {
       await this.authService.sendSignInLink(email);
-      alert(`A sign-in link has been sent to ${email}. Please check your inbox.`);
-    } catch (error) {
-      alert('Failed to send sign-in link. Please try again.');
+      alert(`A sign-in link has been sent to ${email}. Check your inbox (and spam folder).`);
+    } catch (error: any) {
+      const msg = error?.code === 'auth/invalid-email'
+        ? 'Please enter a valid email address.'
+        : error?.message || 'Failed to send sign-in link. Please try again.';
+      this.authError.set(msg);
     } finally {
       this.isAuthLoading.set(false);
     }
