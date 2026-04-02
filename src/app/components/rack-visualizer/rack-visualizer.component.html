@@ -1,0 +1,80 @@
+<div class="visualizer-container">
+  @if (rackRows().length === 0) {
+    <div class="rack-empty">
+      <div class="empty-icon">🎖</div>
+      <p>No awards selected for preview.</p>
+    </div>
+  } @else {
+    <div class="ribbon-rack" id="ribbon-rack">
+      @for (row of rackRows(); track $index; let isFirst = $first) {
+        <div
+          class="rack-row"
+          [class.centered]="isFirst && row.length < 3"
+        >
+          @for (award of row; track award.ribbon.id) {
+            <div class="rack-ribbon-wrapper">
+              <div
+                class="rack-ribbon"
+                [class.framed]="award.isFramed"
+                [style]="getRibbonStyle(award.ribbon)"
+                [title]="award.ribbon.name"
+              >
+                <!-- Star devices overlay -->
+                @if (getStarArray(award).length > 0) {
+                  <div class="star-overlay">
+                    @for (star of getStarArray(award); track $index) {
+                      <span
+                        class="star-device"
+                        [class.star-gold]="star.type === 'gold'"
+                        [class.star-silver]="star.type === 'silver'"
+                        [class.star-bronze]="star.type === 'bronze'"
+                        [class.star-large]="star.size === 'large'"
+                        [class.star-small]="star.size === 'small'"
+                      >★</span>
+                    }
+                  </div>
+                }
+                <!-- Special devices -->
+                @if (award.ribbon.specialDevice === 'fmf') {
+                  <div class="special-device fmf-device" title="FMF Device">⚓</div>
+                }
+                @if (award.ribbon.specialDevice === 'bronze_a') {
+                  <div class="special-device a-device" title="Bronze 'A' Device">A</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Optional Legend -->
+    @if (showLegend()) {
+      <div class="rack-legend">
+        <h3>Rack Details</h3>
+        <div class="legend-items">
+          @for (award of rackAwards(); track award.ribbon.id) {
+            <div class="legend-item">
+              <div class="legend-ribbon" [class.framed]="award.isFramed" [style]="getRibbonStyle(award.ribbon)"></div>
+              <div class="legend-text-content">
+                <div class="legend-title-row">
+                  <span class="legend-name">{{ getLegendName(award.ribbon, award) }}</span>
+                  @if (award.count > 1) {
+                    <span class="legend-count">(×{{ award.count }})</span>
+                  }
+                  @if (award.marksmanshipLevel) {
+                    <span class="legend-qual">— {{ award.marksmanshipLevel | titlecase }}</span>
+                  }
+                </div>
+                @if (getStarsDescription(award)) {
+                  <div class="legend-stars-desc">{{ getStarsDescription(award) }}</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+        <p class="legend-note">* Indicates award includes a medal</p>
+      </div>
+    }
+  }
+</div>

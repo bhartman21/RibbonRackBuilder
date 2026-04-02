@@ -1,0 +1,169 @@
+<app-header>
+  <div actions>
+    <a routerLink="/" class="btn-outline">
+      &larr; Back to Builder
+    </a>
+  </div>
+</app-header>
+
+<div class="admin-container">
+  <div class="admin-content-wrapper">
+    <div class="dashboard-header">
+      <h2 class="dashboard-title">Administrative Control Panel</h2>
+      <p class="dashboard-subtitle">Manage user profiles and built ribbon racks</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="status-box loading">
+      <div class="spinner"></div>
+      <p>Synchronizing with database...</p>
+    </div>
+    
+    <!-- Error State -->
+    <div *ngIf="error()" class="status-box error">
+      <p class="font-bold">System Error</p>
+      <p>{{ error() }}</p>
+    </div>
+
+    <div class="dashboard-controls" *ngIf="!loading()">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Filter by name, detachment, profile ID, or contact info..." 
+          [value]="searchTerm()"
+          (input)="onSearchInput($event)"
+        >
+        <button *ngIf="searchTerm()" class="clear-search" (click)="searchTerm.set('')">&times;</button>
+      </div>
+
+      <div class="results-count">
+        <span class="count-label">Profiles:</span>
+        <span class="count-value">{{ filteredProfiles().length }}</span>
+        <span class="count-divider">/</span>
+        <span class="count-total">{{ profiles().length }}</span>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-container" *ngIf="!loading()">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th (click)="toggleSort('profileId')" class="sortable">
+              Profile ID
+              <span class="sort-indicator" *ngIf="sortField() === 'profileId'">{{ sortOrder() === 'asc' ? '↑' : '↓' }}</span>
+            </th>
+            <th (click)="toggleSort('memberName')" class="sortable">
+              Member Details
+              <span class="sort-indicator" *ngIf="sortField() === 'memberName'">{{ sortOrder() === 'asc' ? '↑' : '↓' }}</span>
+            </th>
+            <th (click)="toggleSort('detachmentName')" class="sortable">
+              Detachment
+              <span class="sort-indicator" *ngIf="sortField() === 'detachmentName'">{{ sortOrder() === 'asc' ? '↑' : '↓' }}</span>
+            </th>
+            <th>Contact Info</th>
+            <th>Security PIN</th>
+            <th class="text-right">Management</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let profile of filteredProfiles()" class="table-row">
+            <td class="font-mono text-xs opacity-60">{{ profile.profileId }}</td>
+            <td>
+              <span class="cell-main-text">{{ profile.memberName || 'Unnamed Member' }}</span>
+            </td>
+            <td>
+              <div class="cell-main-text">{{ profile.detachmentName || 'Unknown Detachment' }}</div>
+              <div class="cell-sub-text">#{{ profile.detachmentNumber || '---' }} | {{ profile.detachmentLocation || 'No Location' }}</div>
+            </td>
+            <td>
+              <div class="cell-main-text">{{ profile.email || 'No Email' }}</div>
+              <div class="cell-sub-text">{{ profile.phone || 'No Phone' }}</div>
+            </td>
+            <td>
+              <div class="cell-main-text font-mono">{{ profile.pin || '---' }}</div>
+            </td>
+            <td>
+              <div class="actions-container">
+                <button (click)="viewRack(profile)" class="action-btn view">View Rack</button>
+                <button (click)="editProfile(profile)" class="action-btn edit">Edit</button>
+                <button (click)="deleteProfile(profile.profileId)" class="action-btn delete">Delete</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="filteredProfiles().length === 0">
+            <td colspan="5" class="empty-table-cell">
+              No ribbon rack profiles found matching your criteria.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal Overlay -->
+<div *ngIf="editingProfile() as ep" class="modal-overlay">
+  <div class="modal-card edit-card">
+    <div class="modal-header">
+      <h3>Edit Personal Information</h3>
+      <button (click)="cancelEdit()" class="close-btn">&times;</button>
+    </div>
+    <div class="modal-body grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="form-group">
+        <label>Member Full Name</label>
+        <input type="text" [value]="ep.memberName" (input)="updateField($event, 'memberName')">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" [value]="ep.email" (input)="updateField($event, 'email')">
+      </div>
+      <div class="form-group">
+        <label>Detachment Name</label>
+        <input type="text" [value]="ep.detachmentName" (input)="updateField($event, 'detachmentName')">
+      </div>
+      <div class="form-group">
+        <label>Detachment Number</label>
+        <input type="text" [value]="ep.detachmentNumber" (input)="updateField($event, 'detachmentNumber')">
+      </div>
+      <div class="form-group">
+        <label>Detachment Location</label>
+        <input type="text" [value]="ep.detachmentLocation" (input)="updateField($event, 'detachmentLocation')">
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" [value]="ep.phone" (input)="updateField($event, 'phone')">
+      </div>
+      <div class="form-group">
+        <label>Security PIN</label>
+        <input type="text" [value]="ep.pin" (input)="updateField($event, 'pin')" placeholder="4-8 characters">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="cancelEdit()" class="btn-cancel">Cancel</button>
+      <button (click)="saveEdit()" class="btn-save">Update Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Rack Modal Overlay -->
+<div *ngIf="viewingProfile() as vp" class="modal-overlay">
+  <div class="modal-card view-card">
+    <div class="modal-header ribbon-header">
+      <div class="header-group">
+        <h3>{{ vp.memberName || 'Member' }}'s Assembly</h3>
+        <p>{{ vp.detachmentName }} #{{ vp.detachmentNumber }}</p>
+      </div>
+      <button (click)="closeView()" class="close-btn">&times;</button>
+    </div>
+    <div class="modal-body-scroll">
+      <div class="rack-view-container">
+        <app-rack-visualizer [awards]="viewingAwards()" [showLegend]="true"></app-rack-visualizer>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="closeView()" class="btn-cancel">Close Viewer</button>
+    </div>
+  </div>
+</div>

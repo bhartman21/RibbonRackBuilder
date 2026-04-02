@@ -1,0 +1,67 @@
+<header class="app-header">
+  <div class="header-content">
+    <div class="header-top-row">
+      <div class="header-brand">
+        <div class="ega-emblem">☆</div>
+        <div class="header-text">
+          <h1>MCL / MODD Ribbon Rack Builder</h1>
+          <p class="header-subtitle">Marine Corps League &amp; Military Order of the Devil Dogs</p>
+        </div>
+      </div>
+      <!-- Injected actions like mobile toggle -->
+      <ng-content select="[brand-actions]"></ng-content>
+    </div>
+    <div class="header-actions">
+      <!-- Auth Section (left side) -->
+      <div class="auth-section">
+        @if (user()) {
+          <div class="user-info">
+            <span class="user-email">{{ user()?.email }}</span>
+            @if (isAdmin()) {
+              <a routerLink="/admin" class="btn btn-outline btn-sm">Admin</a>
+            }
+            <button class="btn btn-outline btn-sm" (click)="logout()">Logout</button>
+          </div>
+        } @else {
+          @if (showLogin()) {
+            <div class="login-form">
+              <input 
+                type="email" 
+                placeholder="Admin email" 
+                [value]="authEmail()"
+                (input)="authEmail.set($any($event.target).value)"
+                class="search-input small"
+                (keyup.enter)="login()"
+              />
+              <button 
+                class="btn btn-primary btn-sm" 
+                (click)="login()"
+                [disabled]="isAuthLoading() || !authEmail()"
+              >
+                {{ isAuthLoading() ? 'Sending...' : 'Sign In' }}
+              </button>
+              <button class="btn btn-outline btn-sm" (click)="showLogin.set(false)">✕</button>
+            </div>
+            @if (authError()) {
+              <div class="auth-error">{{ authError() }}</div>
+            }
+          } @else {
+            <button class="admin-lock-btn" (click)="showLogin.set(true)" title="Administrator Sign In">🔒</button>
+          }
+        }
+      </div>
+
+      <!-- Injected page-specific actions -->
+      <ng-content select="[actions]"></ng-content>
+
+      <!-- Spacer (left) -->
+      <div class="header-spacer"></div>
+
+      <!-- Injected member info (centered) -->
+      <ng-content select="[member-info]"></ng-content>
+
+      <!-- Spacer (right) -->
+      <div class="header-spacer"></div>
+    </div>
+  </div>
+</header>

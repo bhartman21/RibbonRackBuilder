@@ -1,0 +1,295 @@
+<app-header>
+  <!-- Brand actions (mobile toggle) -->
+  <button brand-actions class="mobile-toggle-btn" (click)="toggleSelector()" aria-label="Toggle ribbon selector">
+    @if (selectorOpen()) {
+      <span>✕</span>
+    } @else {
+      <span>☰</span>
+    }
+  </button>
+
+  <!-- Member info display in header (left side) -->
+  <div member-info class="header-member-info" *ngIf="memberName() || detachmentName()">
+    @if (memberName()) {
+      <span class="hdr-member-name">{{ memberName() }}</span>
+    }
+    @if (detachmentName() || detachmentNumber()) {
+      <span class="hdr-detachment">
+        {{ detachmentName() }}@if (detachmentNumber()) { #{{ detachmentNumber() }} }
+      </span>
+    }
+    @if (detachmentLocation()) {
+      <span class="hdr-location">{{ detachmentLocation() }}</span>
+    }
+  </div>
+</app-header>
+
+<main class="app-main">
+  <!-- LEFT PANEL: Award Selector -->
+  <aside class="selector-panel" [class.open]="selectorOpen()">
+    <!-- Mobile close hint -->
+    <button class="mobile-panel-close" (click)="toggleSelector()">✕ Close Selector</button>
+    <div class="search-box">
+      <div class="info-group">
+        <label class="group-label">Ribbon Selector</label>
+        <input
+          type="text"
+          placeholder="Filter ribbons..."
+          [value]="searchQuery()"
+          (input)="onSearchInput($event)"
+          class="search-input"
+          id="search-awards"
+        />
+      </div>
+    </div>
+
+    <!-- MCL Awards Section -->
+    <div class="award-section">
+      <button class="section-header" (click)="toggleSection('mcl')" id="section-mcl">
+        <span class="section-chevron" [class.collapsed]="isSectionCollapsed('mcl')">▼</span>
+        <span class="section-title">MCL Awards</span>
+        <span class="section-count">{{ filteredMcl().length }}</span>
+      </button>
+      @if (!isSectionCollapsed('mcl')) {
+        <div class="section-body">
+          @for (ribbon of filteredMcl(); track ribbon.id) {
+            <div
+              class="award-item"
+              [class.selected]="isSelected(ribbon.id)"
+              (click)="toggleAward(ribbon)"
+              [id]="'award-' + ribbon.id"
+            >
+              <div class="award-ribbon-preview" [style]="getRibbonStyle(ribbon)"></div>
+              <div class="award-info">
+                <span class="award-name">{{ ribbon.shortName }}</span>
+              </div>
+              <div class="award-check">
+                @if (isSelected(ribbon.id)) {
+                  <span class="checkmark">✓</span>
+                }
+              </div>
+            </div>
+            @if (isSelected(ribbon.id)) {
+              <div class="award-controls" (click)="$event.stopPropagation()">
+                @if (ribbon.isMarksmanship) {
+                  <label class="control-label">Qualification:</label>
+                  <select
+                    class="qual-select"
+                    [value]="getMarksmanshipLevel(ribbon.id)"
+                    (change)="setMarksmanshipLevel(ribbon.id, $any($event.target).value)"
+                    [id]="'qual-' + ribbon.id"
+                  >
+                    <option value="marksman">Marksman</option>
+                    <option value="sharpshooter">Sharpshooter</option>
+                    <option value="expert">Expert</option>
+                    <option value="master">Master</option>
+                    <option value="high_master">High Master</option>
+                  </select>
+                } @else if (!ribbon.singleIssue) {
+                  <label class="control-label">Times Received:</label>
+                  <div class="count-controls">
+                    <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                    <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                    <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                  </div>
+                }
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <!-- MODD Awards Section -->
+    <div class="award-section">
+      <button class="section-header" (click)="toggleSection('modd')" id="section-modd">
+        <span class="section-chevron" [class.collapsed]="isSectionCollapsed('modd')">▼</span>
+        <span class="section-title">MODD Awards</span>
+        <span class="section-count">{{ filteredModd().length }}</span>
+      </button>
+      @if (!isSectionCollapsed('modd')) {
+        <div class="section-body">
+          @for (ribbon of filteredModd(); track ribbon.id) {
+            <div
+              class="award-item"
+              [class.selected]="isSelected(ribbon.id)"
+              (click)="toggleAward(ribbon)"
+              [id]="'award-' + ribbon.id"
+            >
+              <div class="award-ribbon-preview" [style]="getRibbonStyle(ribbon)"></div>
+              <div class="award-info">
+                <span class="award-name">{{ ribbon.shortName }}</span>
+              </div>
+              <div class="award-check">
+                @if (isSelected(ribbon.id)) {
+                  <span class="checkmark">✓</span>
+                }
+              </div>
+            </div>
+            @if (isSelected(ribbon.id) && !ribbon.singleIssue) {
+              <div class="award-controls" (click)="$event.stopPropagation()">
+                <label class="control-label">Times Received:</label>
+                <div class="count-controls">
+                  <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                  <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                  <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Convention Awards Section -->
+    <div class="award-section">
+      <button class="section-header" (click)="toggleSection('convention')" id="section-convention">
+        <span class="section-chevron" [class.collapsed]="isSectionCollapsed('convention')">▼</span>
+        <span class="section-title">Convention &amp; Anniversary Awards</span>
+        <span class="section-count">{{ filteredConvention().length }}</span>
+      </button>
+      @if (!isSectionCollapsed('convention')) {
+        <div class="section-body">
+          @for (ribbon of filteredConvention(); track ribbon.id) {
+            <div
+              class="award-item"
+              [class.selected]="isSelected(ribbon.id)"
+              (click)="toggleAward(ribbon)"
+              [id]="'award-' + ribbon.id"
+            >
+              <div class="award-ribbon-preview" [style]="getRibbonStyle(ribbon)"></div>
+              <div class="award-info">
+                <span class="award-name">{{ ribbon.shortName }}</span>
+              </div>
+              <div class="award-check">
+                @if (isSelected(ribbon.id)) {
+                  <span class="checkmark">✓</span>
+                }
+              </div>
+            </div>
+            @if (isSelected(ribbon.id) && (!ribbon.singleIssue || ribbon.hasFrame)) {
+              <div class="award-controls" (click)="$event.stopPropagation()">
+                @if (!ribbon.singleIssue) {
+                  <label class="control-label">Times Received:</label>
+                  <div class="count-controls">
+                    <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                    <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                    <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                  </div>
+                }
+                @if (ribbon.hasFrame) {
+                  <label class="control-label checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; cursor: pointer;">
+                    <input type="checkbox" [checked]="isFramed(ribbon.id)" (change)="setFramed(ribbon.id, $any($event.target).checked)">
+                    Gold Frame
+                  </label>
+                }
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <!-- State Awards Section -->
+    <div class="award-section">
+      <button class="section-header" (click)="toggleSection('state')" id="section-state">
+        <span class="section-chevron" [class.collapsed]="isSectionCollapsed('state')">▼</span>
+        <span class="section-title">State Awards</span>
+        <span class="section-count">{{ filteredState().length }}</span>
+      </button>
+      @if (!isSectionCollapsed('state')) {
+        <div class="section-body">
+          @for (ribbon of filteredState(); track ribbon.id) {
+            <div
+              class="award-item"
+              [class.selected]="isSelected(ribbon.id)"
+              (click)="toggleAward(ribbon)"
+              [id]="'award-' + ribbon.id"
+            >
+              <div class="award-ribbon-preview" [style]="getRibbonStyle(ribbon)"></div>
+              <div class="award-info">
+                <span class="award-name">{{ ribbon.shortName }}</span>
+              </div>
+              <div class="award-check">
+                @if (isSelected(ribbon.id)) {
+                  <span class="checkmark">✓</span>
+                }
+              </div>
+            </div>
+            @if (isSelected(ribbon.id) && (!ribbon.singleIssue || ribbon.hasFrame)) {
+              <div class="award-controls" (click)="$event.stopPropagation()">
+                @if (!ribbon.singleIssue) {
+                  <label class="control-label">Times Received:</label>
+                  <div class="count-controls">
+                    <button class="count-btn" (click)="updateCount(ribbon.id, -1)">−</button>
+                    <span class="count-value">{{ getAwardCount(ribbon.id) }}</span>
+                    <button class="count-btn" (click)="updateCount(ribbon.id, 1)">+</button>
+                  </div>
+                }
+                @if (ribbon.hasFrame) {
+                  <label class="control-label checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.4rem; cursor: pointer;">
+                    <input type="checkbox" [checked]="isFramed(ribbon.id)" (change)="setFramed(ribbon.id, $any($event.target).checked)">
+                    Gold Frame
+                  </label>
+                }
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+  </aside>
+
+  <!-- RIGHT PANEL: Ribbon Rack Display -->
+  <section class="rack-panel">
+    <div class="rack-container">
+      <!-- Status Feedback Banner -->
+      <div class="status-banner" *ngIf="statusMessage()" [class.error]="statusMessage()?.includes('Error') || statusMessage()?.includes('Incorrect') || statusMessage()?.includes('required')">
+        {{ statusMessage() }}
+      </div>
+
+      <!-- Member Information Form -->
+      <div class="info-inputs no-print">
+        <div class="info-group">
+          <label class="group-label">Member Information</label>
+          <input type="text" placeholder="Member Full Name" [value]="memberName()" (input)="memberName.set($any($event.target).value)" class="search-input mb-2" />
+          <input type="text" placeholder="Detachment Name" [value]="detachmentName()" (input)="detachmentName.set($any($event.target).value)" class="search-input mb-2" />
+          <div class="input-row">
+            <input type="text" placeholder="No." [value]="detachmentNumber()" (input)="detachmentNumber.set($any($event.target).value)" class="search-input small" />
+            <input type="text" placeholder="Location (City, ST)" [value]="detachmentLocation()" (input)="detachmentLocation.set($any($event.target).value)" class="search-input" />
+          </div>
+          <div class="input-row input-row-wrap mt-2 mb-2">
+            <input type="text" placeholder="MCL ProfileID" [value]="mclProfileId()" (input)="mclProfileId.set($any($event.target).value)" class="search-input profile-id-input" />
+            <input type="password" placeholder="Security PIN" [value]="rackPin()" (input)="rackPin.set($any($event.target).value)" class="search-input pin-input" title="Enter a 4-8 digit PIN to protect your rack" />
+            <div class="btn-group">
+              <button class="btn btn-outline" (click)="loadUserRack()" [disabled]="!mclProfileId()">Load</button>
+              <button class="btn btn-primary" (click)="saveUserRack()" [disabled]="!mclProfileId()">Save</button>
+            </div>
+          </div>
+          <div class="input-row">
+            <input type="email" placeholder="Email (Optional)" [value]="email()" (input)="email.set($any($event.target).value)" class="search-input" />
+            <input type="tel" placeholder="Phone (Optional)" [value]="phone()" (input)="phone.set($any($event.target).value)" class="search-input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Ribbon Rack Visualizer -->
+      <app-rack-visualizer [awards]="rackAwards()"></app-rack-visualizer>
+
+      <!-- Rack Actions (below the ribbons) -->
+      <div class="rack-actions-bar no-print" *ngIf="totalSelected() > 0">
+        <div class="selection-status">
+          <span class="badge">{{ totalSelected() }} selected</span>
+          <button class="btn-text-link" (click)="clearAll()">Clear All</button>
+        </div>
+        <button class="btn btn-primary" (click)="printRack()">
+          <span class="btn-icon">🖨</span> Print Ribbon Rack
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Based on the MCL Ribbon Precedence Chart (Rev 10/2023) &amp; Enclosure 4 (2025 NAP)</p>
+</footer>

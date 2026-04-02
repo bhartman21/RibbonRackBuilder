@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, setDoc, getDoc, Timestamp } from '@angular/fire/firestore';
+import { Firestore, collection, doc, setDoc, getDoc, getDocs, deleteDoc, updateDoc, Timestamp } from '@angular/fire/firestore';
 import { UserRackProfile } from '../models/ribbon.model';
 
 @Injectable({
@@ -25,5 +25,23 @@ export class ProfileService {
       return docSnap.data() as UserRackProfile;
     }
     return null;
+  }
+
+  async getAllProfiles(): Promise<UserRackProfile[]> {
+    const querySnapshot = await getDocs(this.profileCollection);
+    return querySnapshot.docs.map(doc => doc.data() as UserRackProfile);
+  }
+
+  async deleteProfile(profileId: string): Promise<void> {
+    const profileDoc = doc(this.profileCollection, profileId);
+    await deleteDoc(profileDoc);
+  }
+
+  async updateProfilePersonalDetails(profileId: string, details: Partial<UserRackProfile>): Promise<void> {
+    const profileDoc = doc(this.profileCollection, profileId);
+    await updateDoc(profileDoc, {
+      ...details,
+      updatedAt: Timestamp.now()
+    });
   }
 }

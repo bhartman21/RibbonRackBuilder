@@ -1,0 +1,256 @@
+:host {
+  display: block;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #001B3A 0%, #00264D 50%, #001B3A 100%);
+  border-bottom: 3px solid #CC0000;
+  padding: 0.75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Header Member Info ── */
+.header-member-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.4rem 1rem;
+  background: rgba(207, 181, 59, 0.06);
+  border: 1px solid rgba(207, 181, 59, 0.15);
+  border-radius: 8px;
+  text-align: right;
+}
+
+.hdr-member-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.hdr-detachment {
+  font-size: 0.8rem;
+  color: #CFB53B;
+  font-weight: 600;
+}
+
+.hdr-location {
+  font-size: 0.75rem;
+  color: #8A9BB5;
+  font-style: italic;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.header-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ega-emblem {
+  font-size: 2rem;
+  color: #CFB53B;
+  text-shadow: 0 0 10px rgba(207, 181, 59, 0.5);
+}
+
+.header-text h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.header-subtitle {
+  font-size: 0.75rem;
+  color: #8A9BB5;
+  margin: 0.15rem 0 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header-spacer {
+  flex: 1;
+}
+
+.auth-section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.login-form,
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: #C8D4E3;
+  font-weight: 500;
+}
+
+/* ── Auth Error ── */
+.auth-error {
+  font-size: 0.78rem;
+  color: #FF6B6B;
+  margin-top: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  background: rgba(255, 0, 0, 0.08);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 0, 0, 0.15);
+}
+
+.admin-lock-btn {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  padding: 0.25rem;
+}
+
+.admin-lock-btn:hover {
+  opacity: 0.7;
+}
+
+/* ── Buttons ── */
+.btn {
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.btn-primary {
+  background: #CC0000;
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background: #E60000;
+  box-shadow: 0 0 12px rgba(204, 0, 0, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #CFB53B;
+  border: 1px solid #CFB53B;
+}
+
+.btn-outline:hover {
+  background: rgba(207, 181, 59, 0.1);
+}
+
+.btn-admin {
+  background: rgba(207, 181, 59, 0.15);
+  color: #CFB53B;
+  border: 1px solid #CFB53B;
+  text-decoration: none;
+}
+
+.btn-admin:hover {
+  background: rgba(207, 181, 59, 0.25);
+}
+
+a.btn {
+  text-decoration: none;
+  line-height: 1;
+  font-family: inherit;
+}
+
+.search-input {
+  padding: 0.55rem 0.85rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(207, 181, 59, 0.2);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.search-input.small {
+  width: 200px;
+}
+
+@media (max-width: 768px) {
+  .header-actions {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .auth-section {
+    order: 2;
+  }
+
+  .header-spacer {
+    display: none;
+  }
+}
+
+@media (max-width: 564px) {
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .auth-section,
+  .auth-section .login-form,
+  .auth-section .login-form .search-input {
+    width: 100%;
+  }
+
+  .auth-section .login-form {
+    flex-wrap: wrap;
+  }
+
+  .auth-section .login-form .btn {
+    flex: 1;
+  }
+
+  /* Target the projected member-info slot */
+  ::ng-deep .header-member-info {
+    width: 100%;
+    order: 1;
+  }
+}

@@ -1,0 +1,561 @@
+/* ═══════════════════════════════════════════════════════════
+   MCL / MODD Ribbon Rack Builder — Layout Styles
+   Theme: Marine Corps Dress Blues
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Layout ── */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.no-print {
+  display: block;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ── Header Member Info ──
+   These styles MUST live here (not in header.component.css) because
+   Angular view encapsulation scopes projected ng-content to the
+   DECLARING component, not the host component. */
+.header-member-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 1rem;
+  background: rgba(207, 181, 59, 0.06);
+  border: 1px solid rgba(207, 181, 59, 0.15);
+  border-radius: 8px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.hdr-member-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.hdr-detachment {
+  font-size: 0.8rem;
+  color: #CFB53B;
+  font-weight: 600;
+}
+
+.hdr-location {
+  font-size: 0.75rem;
+  color: #8A9BB5;
+  font-style: italic;
+}
+
+/* ── Buttons & Labels ── */
+.btn {
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-primary {
+  background: #CC0000;
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background: #E60000;
+  box-shadow: 0 0 12px rgba(204, 0, 0, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #CFB53B;
+  border: 1px solid #CFB53B;
+}
+
+.btn-outline:hover {
+  background: rgba(207, 181, 59, 0.1);
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.badge {
+  background: #CC0000;
+  color: #FFFFFF;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Main Layout ── */
+.app-main {
+  display: flex;
+  flex: 1;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ── Selector Panel (Left) ── */
+.selector-panel {
+  width: 400px;
+  min-width: 400px;
+  background: #001B3A;
+  border-right: 1px solid rgba(207, 181, 59, 0.15);
+  overflow-y: auto;
+  height: calc(100vh - 72px);
+  position: sticky;
+  top: 72px;
+  transition: transform 0.3s ease;
+  z-index: 50;
+}
+
+.search-box {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(207, 181, 59, 0.1);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.55rem 0.85rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(207, 181, 59, 0.2);
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.search-input::placeholder {
+  color: #5A6F8A;
+}
+
+.search-input:focus {
+  border-color: #CFB53B;
+  box-shadow: 0 0 8px rgba(207, 181, 59, 0.2);
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.group-label {
+  font-size: 0.7rem;
+  color: #8A9BB5;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.mb-2 { margin-bottom: 0.5rem; }
+.mt-2 { margin-top: 0.5rem; }
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input-row .small {
+  width: 80px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.profile-id-input {
+  width: 140px;
+  flex: none;
+}
+
+.pin-input {
+  width: 110px;
+  flex: none;
+}
+
+.input-row-wrap {
+  flex-wrap: wrap;
+}
+
+/* ── Award Sections ── */
+.award-section {
+  border-bottom: 1px solid rgba(207, 181, 59, 0.08);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: none;
+  color: #CFB53B;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.section-header:hover {
+  background: rgba(207, 181, 59, 0.06);
+}
+
+.section-chevron {
+  font-size: 0.65rem;
+  margin-right: 0.5rem;
+  transition: transform 0.2s;
+  color: #8A9BB5;
+}
+
+.section-chevron.collapsed {
+  transform: rotate(-90deg);
+}
+
+.section-title {
+  font-weight: 700;
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-count {
+  font-size: 0.7rem;
+  color: #5A6F8A;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+}
+
+.section-body {
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Award Items ── */
+.award-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  gap: 0.65rem;
+}
+
+.award-item:hover {
+  background: rgba(207, 181, 59, 0.06);
+}
+
+.award-item.selected {
+  background: rgba(204, 0, 0, 0.12);
+  border-left: 3px solid #CC0000;
+}
+
+.award-ribbon-preview {
+  width: 56px;
+  height: 18px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.award-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.award-name {
+  font-size: 0.78rem;
+  color: #C8D4E3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.award-check {
+  width: 24px;
+  text-align: center;
+}
+
+.checkmark {
+  color: #CC0000;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ── Award Controls ── */
+.award-controls {
+  display: flex;
+  align-items: center;
+  padding: 0.35rem 0.85rem 0.55rem;
+  background: rgba(0, 0, 0, 0.15);
+  gap: 0.5rem;
+  animation: slideDown 0.15s ease-out;
+}
+
+.control-label {
+  font-size: 0.7rem;
+  color: #5A6F8A;
+  white-space: nowrap;
+}
+
+.count-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.count-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid rgba(207, 181, 59, 0.3);
+  background: rgba(207, 181, 59, 0.08);
+  color: #CFB53B;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  padding: 0;
+}
+
+.count-btn:hover {
+  background: rgba(207, 181, 59, 0.2);
+  border-color: #CFB53B;
+}
+
+.count-value {
+  font-size: 0.85rem;
+  color: #FFFFFF;
+  width: 28px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.qual-select {
+  padding: 0.3rem 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(207, 181, 59, 0.3);
+  border-radius: 4px;
+  color: #FFFFFF;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+/* ── Status Banner ── */
+.status-banner {
+  position: fixed;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 0.85rem 2.5rem;
+  
+  /* USMC Base Sign Styling */
+  background: #CC0000;
+  color: #FFEB3B;
+  text-transform: uppercase;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  
+  /* Creates the "inset yellow border" effect typical of military signs */
+  border: 3px solid #CC0000;
+  outline: 4px solid #FFEB3B;
+  outline-offset: -7px;
+  
+  border-radius: 4px; /* Signs are generally rectangular, not pill-shaped */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  font-size: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  
+  animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: none;
+}
+
+@keyframes slideInDown {
+  from { transform: translate(-50%, -30px) scale(0.9); opacity: 0; }
+  to { transform: translate(-50%, 0) scale(1); opacity: 1; }
+}
+
+.status-banner.error {
+  /* Error uses the same sign styling, maybe flash the border or text? */
+  background: #B30000; /* slightly darker red for errors to make the yellow pop harder */
+}
+
+/* ── Rack Panel (Right) ── */
+.rack-panel {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+  background: #00264D;
+}
+
+.rack-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.info-inputs {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(207, 181, 59, 0.15);
+  border-radius: 12px;
+}
+
+.rack-actions-bar {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(207, 181, 59, 0.15);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selection-status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-text-link {
+  background: none;
+  border: none;
+  color: #CFB53B;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-text-link:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+/* Old rack-header/member-info-display styles removed — member info now in header */
+
+/* ── Mobile Layout ── */
+.mobile-toggle-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #CFB53B;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.mobile-panel-close {
+  display: none;
+  width: 100%;
+  padding: 0.75rem;
+  background: #CC0000;
+  color: white;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .app-main {
+    flex-direction: column;
+  }
+  .selector-panel {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    height: 100vh;
+    z-index: 1000;
+    transform: translateX(-100%);
+  }
+  .selector-panel.open {
+    transform: translateX(0);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  }
+  .mobile-toggle-btn {
+    display: flex;
+  }
+  .mobile-panel-close {
+    display: block;
+  }
+  .rack-panel {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-id-input,
+  .pin-input {
+    width: auto !important;
+    flex: 1 1 calc(50% - 0.25rem) !important;
+  }
+  .input-row-wrap .btn-group {
+    width: 100%;
+    justify-content: stretch;
+  }
+  .input-row-wrap .btn-group .btn {
+    flex: 1;
+  }
+  .rack-actions-bar {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .header-member-info {
+    flex-direction: column;
+    gap: 0.15rem;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+@media (max-width: 564px) {
+  .header-member-info {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

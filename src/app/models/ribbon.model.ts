@@ -41,4 +41,5 @@ export interface UserRackProfile {
     isFramed?: boolean;
   }[];
   updatedAt: any; // Firestore Timestamp
+  pin?: string;
 }
