@@ -82,7 +82,15 @@
               <div class="cell-sub-text">{{ profile.phone || 'No Phone' }}</div>
             </td>
             <td>
-              <div class="cell-main-text font-mono">{{ profile.pin || '---' }}</div>
+              <div class="cell-main-text font-mono pin-cell">
+                <span *ngIf="!profile.pin" class="opacity-50">---</span>
+                <ng-container *ngIf="profile.pin">
+                  <span>{{ visiblePins().has(profile.profileId) ? profile.pin : '••••' }}</span>
+                  <button (click)="togglePinVisibility(profile.profileId)" class="pin-toggle-btn" [attr.title]="visiblePins().has(profile.profileId) ? 'Hide PIN' : 'Reveal PIN'">
+                    {{ visiblePins().has(profile.profileId) ? '👁‍🗨' : '👁' }}
+                  </button>
+                </ng-container>
+              </div>
             </td>
             <td>
               <div class="actions-container">

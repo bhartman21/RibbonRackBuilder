@@ -375,6 +375,12 @@
   cursor: pointer;
 }
 
+/* Ensure dropdown options remain visible and don't blend into native light-mode OS themes */
+.qual-select option {
+  background: #00264D;
+  color: #FFFFFF;
+}
+
 /* ── Status Banner ── */
 .status-banner {
   position: fixed;

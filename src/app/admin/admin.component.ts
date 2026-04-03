@@ -183,4 +183,19 @@ export class AdminComponent implements OnInit {
   closeView() {
     this.viewingProfile.set(null);
   }
+
+  // PIN visibility state Tracker
+  readonly visiblePins = signal<Set<string>>(new Set());
+
+  togglePinVisibility(profileId: string) {
+    this.visiblePins.update(currentSet => {
+      const newSet = new Set(currentSet);
+      if (newSet.has(profileId)) {
+        newSet.delete(profileId);
+      } else {
+        newSet.add(profileId);
+      }
+      return newSet;
+    });
+  }
 }

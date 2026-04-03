@@ -233,6 +233,32 @@
   margin-top: 2px;
 }
 
+/* ── PIN Cell Toggle ── */
+.pin-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pin-toggle-btn {
+  background: none;
+  border: none;
+  color: #CFB53B;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.pin-toggle-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 /* ── Actions Container (Fixed Alignment) ── */
 .actions-container {
   display: flex;
